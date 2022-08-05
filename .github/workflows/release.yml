@@ -15,7 +15,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: build
-        run: make 
+        run: make
       - name: release
         uses: actions/create-release@v1
         id: create_release
@@ -26,13 +26,16 @@ jobs:
           tag_name: ${{ github.run_number }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
+      - name: Archive site content
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: dark-mode-notify.zip
       - name: upload darwin artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: .dark-mode-notify.tar.gz
-          asset_name: dark-mode-notify.tar.gz
+          asset_path: ./dark-mode-notify.zip
+          asset_name: dark-mode-notify-v${{ github.run_number }}.zip
           asset_content_type: application/gzip
-      
